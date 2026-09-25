@@ -20,7 +20,13 @@ async function loadAvatar(){
  vrm=gltf.userData.vrm;if(!vrm)throw Error('Arquivo sem avatar VRM');VRMUtils.rotateVRM0(vrm);VRMUtils.combineSkeletons(vrm.scene);vrm.scene.traverse(o=>o.frustumCulled=false);scene.add(vrm.scene);
  const bone=name=>vrm.humanoid.getNormalizedBoneNode(name);
  const left=bone('leftUpperArm'),right=bone('rightUpperArm'),head=bone('head'),chest=bone('chest');
- if(left)left.rotation.z=1.15;if(right)right.rotation.z=-1.15;vrm.update(0);vrm.scene.updateMatrixWorld(true);
+ // Rest pose: shoulders down, arms beside the torso, elbows slightly bent.
+ if(left)left.rotation.set(.06,0,1.43);
+ if(right)right.rotation.set(.06,0,-1.43);
+ const leftElbow=bone('leftLowerArm'),rightElbow=bone('rightLowerArm');
+ if(leftElbow)leftElbow.rotation.set(-.10,0,-.08);
+ if(rightElbow)rightElbow.rotation.set(-.10,0,.08);
+ vrm.update(0);vrm.scene.updateMatrixWorld(true);
  const bounds=new THREE.Box3().setFromObject(vrm.scene);const height=bounds.max.y-bounds.min.y;const center=bounds.getCenter(new THREE.Vector3());
  const camera=new THREE.PerspectiveCamera(32,1,.01,100);renderer.domElement.tabIndex=0;renderer.domElement.setAttribute('aria-label','Avatar VTuber '+models[selected].name+'. Arraste para girar e use as setas para mudar o ângulo.');stage.append(renderer.domElement);
  controls=new OrbitControls(camera,renderer.domElement);controls.enablePan=false;controls.enableZoom=false;controls.enableDamping=true;controls.minPolarAngle=Math.PI*.25;controls.maxPolarAngle=Math.PI*.7;controls.minAzimuthAngle=-Math.PI*.65;controls.maxAzimuthAngle=Math.PI*.65;
