@@ -2,7 +2,7 @@ const stage=document.querySelector('#vtuber-stage');
 const loadButton=document.querySelector('#vtuber-load');
 const status=document.querySelector('#vtuber-status');
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const models={joao:{name:'João',file:'modelos/joao.vrm',size:14},ramses:{name:'Ramses',file:'modelos/ramses.vrm',size:12}};
+const models={joao:{name:'João',file:'modelos/joao.vrm',size:14}};
 let selected='joao',busy=false,visible=false,cleanup;
 const modelButtons=[...document.querySelectorAll('[data-vtuber-model]')];
 function selectLabel(){modelButtons.forEach(button=>{button.disabled=busy;button.setAttribute('aria-pressed',String(button.dataset.vtuberModel===selected))});document.querySelector('.vtuber-badge').textContent=models[selected].name.toUpperCase()+' / AVATAR 3D';}
@@ -51,7 +51,7 @@ async function loadAvatar(){
  const headOffset=new THREE.Quaternion(),headEuler=new THREE.Euler();
  let headX=0,headY=0;
  // Short phonemes overlap softly; phrase pauses let the lips settle completely.
- const vowels=selected==='ramses'?['aa','ih','ee','ou','oh']:['aa','ih','ee','ou'];
+ const vowels=['aa','ih','ee','ou'];
  const mouth=Object.fromEntries(vowels.map(v=>[v,0]));
  const emotion={happy:0,angry:0,sad:0};
  let syllableStart=0,syllableEnd=0,phraseLeft=0,phoneme='aa',strength=.5;
